@@ -1,19 +1,15 @@
 from dataclasses import dataclass
 
 @dataclass
-class ErrorCode:
-
-    status : bool
-    msg : str
-
-@dataclass
 class ErrorData:
 
     status : bool
     msg : str
     data : any
 
-    def toErrorCode(self) -> ErrorCode :
+    def __iter__(self) -> dict :
 
-        return ErrorCode(self.status, self.msg)
+        yield "status", self.status,
+        yield "msg", self.msg,
+        yield "data", self.data
 
