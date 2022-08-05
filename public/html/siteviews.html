@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="manifest" href=" {{ context.path }}manifest.json" />
+        <link rel="icon" href="{{ context.path }}images/logo.ico">
+        <link rel="stylesheet" type="text/css" href="{{ context.path }}css/utils.css">
+        <link rel="stylesheet" type="text/css" href="{{ context.path }}css/{{ context.file }}.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="origin">
+        <meta charset = "utf-8">
+        <!--<meta name="theme-color" content="#06f">-->
+        <meta property="og:site_name" content="Tweet Vibe">
+        <meta property="og:title" content="Tweet Vibe">
+        <meta property="og:description" content="{{ context.description }}">
+        <meta property="og:image" content="{{ context.path }}images/logo.svg">
+        <meta property="og:type" content="website"/>
+        <title>Tweet Vibe</title>
+    </head>
+    <body>
+        <main id="ROOT"></main>
+    </body>
+    <script>
+        async function fetchWithTimeOut(url, body, content_type, meth, timeout) {
+
+            var status;
+            var resp;
+            var response;
+            const options = {
+                method: meth,
+                headers: {
+                    'Content-Type': `${content_type}; charset=UTF-8`,
+                },
+                body: body,
+            };
+            const controller = new AbortController();
+            const id = setTimeout(() => {
+                controller.abort();
+            }, timeout);
+
+            if (meth === "Get" | meth === "Head"){
+
+                response = await fetch(url, {signal: controller.signal});
+            }else{
+
+                response = await fetch(url, {...options, signal: controller.signal});
+            }
+
+            clearTimeout(id);
+            return {ok : response.ok, status : response.status, text : await response.text()};
+        }
+    </script>
+    <script src = "{{ context.path }}js/{{ context.file }}.js"></script>
+</html>
