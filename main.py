@@ -3,7 +3,7 @@ from pathlib import Path
 from tweetvibe.utils import datatypes, utils
 from tweetvibe.twitter import twitter
 from tweetvibe.detectvibe import detectvibe
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 
 env_file = Path(__file__).parent / ".env"
 dotenv.load_dotenv(env_file)
@@ -13,8 +13,13 @@ def server():
     app = Flask(__name__, static_folder = "public/", template_folder = "public/html/")
     @app.route("/")
     async def home():
-
-        return ""
+        
+        context = {
+            "path" : "/public/",
+            "file" : "homepage",
+            "description" : "Tweet vibe, what vibe does your tweet give off ?"
+        }
+        return render_template("siteviews.html", context = context)
 
     @app.route("/tweetvibe.json", methods=['POST'])
     async def tweetvibe():
@@ -67,3 +72,6 @@ def server():
 
 server()
 
+#[if __name__ == "__main__":
+
+    #pass
