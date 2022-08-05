@@ -3,3 +3,6 @@ __pycache__
 
 ## .env file
 .env
+
+## generated js files
+public/js/homepage.js
