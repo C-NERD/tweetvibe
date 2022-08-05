@@ -1,0 +1,14 @@
+{
+    "name": "Tweet vibe",
+    "short_name": "Tweet vibe",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "Analyse tweet's vibe",
+    "icons": [{
+      "src": "images/logo.ico",
+      "sizes": "48x48",
+      "type": "image/ico"
+    }]
+}
+  
