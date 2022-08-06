@@ -7,6 +7,8 @@ from tweetvibe.database import database
 from flask import Flask, request, make_response, render_template
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from multiprocessing import Process
+from os import cpu_count
 
 env_file = Path(__file__).parent / ".env"
 dotenv.load_dotenv(env_file)
@@ -104,8 +106,16 @@ def server():
 
     app.run("localhost", 5000, True)
 
-server()
+if __name__ == "__main__":
 
-#[if __name__ == "__main__":
+    ## user all cpu cores
+    cpus = cpu_count()
+    if cpus == None:
 
-    #pass
+        cpus = 1
+
+    for _ in range(cpus):
+
+        process = Process(target = server)
+        process.start()
+        process.join()
