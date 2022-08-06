@@ -1,7 +1,7 @@
 import requests
 from tweetvibe.utils import datatypes
 from enum import IntEnum, unique
-from os import getenv
+from os import environ
 from json import dumps
 
 @unique
@@ -19,7 +19,7 @@ class SentimentAnalyser:
     def __init__(self):
 
         self.ROOT_URL = "https://language.googleapis.com"
-        self.KEY = getenv("GOOGLE_API_KEY")
+        self.KEY = environ.get("GOOGLE_API_KEY")
 
     def refine_score(self, score : float) -> int :
         """

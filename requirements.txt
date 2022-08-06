@@ -1,3 +1,5 @@
 dotenv
 flask
 python-twitter-v2
+pymongo
+flask_limiter

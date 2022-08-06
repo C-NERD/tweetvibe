@@ -2,57 +2,57 @@ import pytwitter
 from tweetvibe.utils import datatypes
 from tweetvibe.utils.utils import isemptyorspace
 from re import match, split
-from os import getenv
+from os import environ
+
+def isvalid_tweet_url(url : str) -> bool :
+    """
+    Checks if url contains twitter.com and the string status
+
+    :param url: tweet url
+
+    retype :
+        - bool, True if url is valid tweet url else False
+    """
+
+    part_url = url.split("/")
+    if "twitter.com" in part_url and "status" in part_url:
+
+        return True
+
+    else:
+
+        return False
+
+def getidfromurl(url : str) -> str :
+    """
+    Gets tweetid from tweet url
+
+    :param url: tweet url
+
+    retype :
+        - tweet id
+        - empty string when id not found
+    """
+
+    part_url = split(r"(/|\?)", url)
+    for partition in part_url:
+
+        if match(r"[0-9]", partition) != None:
+
+            return partition
+
+    return ""
 
 class Twitter:
 
     def __init__(self):
         
         self.api = pytwitter.Api(
-            bearer_token = getenv("TWITTER_BEARER_TOKEN"),
-            consumer_key = getenv("TWITTER_API_KEY"),
-            consumer_secret = getenv("TWITTER_API_SECRET")
+            bearer_token = environ.get("TWITTER_BEARER_TOKEN"),
+            consumer_key = environ.get("TWITTER_API_KEY"),
+            consumer_secret = environ.get("TWITTER_API_SECRET")
         )
     
-    def isvalid_tweet_url(self, url : str) -> bool :
-        """
-        Checks if url contains twitter.com and the string status
-
-        :param url: tweet url
-
-        retype :
-            - bool, True if url is valid tweet url else False
-        """
-
-        part_url = url.split("/")
-        if "twitter.com" in part_url and "status" in part_url:
-
-            return True
-
-        else:
-
-            return False
-
-    def getidfromurl(self, url : str) -> str :
-        """
-        Gets tweetid from tweet url
-
-        :param url: tweet url
-
-        retype :
-            - tweet id
-            - empty string when id not found
-        """
-
-        part_url = split(r"(/|\?)", url)
-        for partition in part_url:
-
-            if match(r"[0-9]", partition) != None:
-
-                return partition
-
-        return ""
-
     def getdirect_children(self, author_id : str, tweet_id : str, conversation_id : str, tweets : list) -> dict :
         """
         Generator to get direct replies from a tweet
@@ -82,25 +82,7 @@ class Twitter:
 
             yield tweet
 
-    def get_replies(self, url : str, limit : int = 100) -> datatypes.ErrorData :
-        """
-        Gets direct replies for a tweet or tweet reply,
-        
-        :param url: url of tweet whose replies will be scraped
-        :param limit: maximum amount of replies to scrape. default 50
-
-        retype:  
-            - ErrorData with data as list of tweet object or None
-        """
-
-        if not self.isvalid_tweet_url(url):
-
-            return datatypes.ErrorData(False, "Invalid tweet url", None)
-
-        tweet_id = self.getidfromurl(url)
-        if len(tweet_id) == 0 or tweet_id.isspace():
-
-            return datatypes.ErrorData(False, "Could not find tweet id from url", None)
+    def get_tweet(self, tweet_id : str) -> datatypes.ErrorData :
 
         tweet = self.api.get_tweet(
             tweet_id, tweet_fields = ("conversation_id", "author_id", "created_at"), 
@@ -109,25 +91,45 @@ class Twitter:
         conversation_id = ""
         author_id = ""
         created_at = ""
-        id = ""
+        tweet_id = ""
 
         try:
             
             conversation_id = tweet["data"]["conversation_id"]
             author_id = tweet["data"]["author_id"]
             created_at = tweet["data"]["created_at"]
-            id = tweet["data"]["id"]
-            if isemptyorspace(conversation_id) or isemptyorspace(author_id) or isemptyorspace(created_at) or isemptyorspace(id): 
+            tweet_id = tweet["data"]["id"]
+            if isemptyorspace(conversation_id) or isemptyorspace(author_id) or isemptyorspace(created_at) or isemptyorspace(tweet_id):
                 ## If conversation_id, author_id or created_at is empty or whitspace raise keyerror
 
                 raise KeyError()
             
+            return datatypes.ErrorData(True, "", {
+                "tweet_id" : tweet_id, "author_id" : author_id, 
+                "conversation_id" : conversation_id, "created_at" : created_at
+                })
         except KeyError:
             ## TODO : log out an error message
-            return datatypes.ErrorData(False, "Could not get tweet's data", [])
+            return datatypes.ErrorData(False, "Could not get tweet's data", None)
+
+    def get_replies(self, data : dict, limit : int = 100) -> datatypes.ErrorData :
+        """
+        Gets direct replies for a tweet or tweet reply,
+        
+        :param data: data of tweet returned by self.get_tweet
+        :param limit: maximum amount of replies to scrape. default 100
+
+        retype:  
+            - ErrorData with data as list of tweet object or None
+        """
+
+        conversation_id = data["conversation_id"]
+        author_id = data["author_id"]
+        created_at = data["created_at"]
+        tweet_id = data["tweet_id"]
 
         replies = self.api.search_tweets(
             f"conversation_id:{conversation_id}", start_time = created_at, max_results = limit, sort_order = "relevancy", 
             tweet_fields = ("conversation_id", "in_reply_to_user_id", "author_id", "created_at"), return_json = True
         )
-        return datatypes.ErrorData(True, "", self.getdirect_children(author_id, id, conversation_id, replies["data"]))
+        return datatypes.ErrorData(True, "", self.getdirect_children(author_id, tweet_id, conversation_id, replies["data"]))
