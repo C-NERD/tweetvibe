@@ -5,4 +5,4 @@ __pycache__
 .env
 
 ## generated js files
-public/js/homepage.js
+homepage.js
