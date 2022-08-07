@@ -4,8 +4,8 @@ class Config:
     """Base config."""
 
     SECRET_KEY = environ.get('SECRET_KEY')
-    STATIC_FOLDER = 'public/'
-    TEMPLATES_FOLDER = 'public/html/'
+    STATIC_FOLDER = 'static'
+    TEMPLATES_FOLDER = 'templates'
 
 
 class Production(Config):
