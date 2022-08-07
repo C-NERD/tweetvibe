@@ -5,7 +5,7 @@ author        = "C-NERD"
 description   = "Web frontend for tweetvibe app"
 license       = "MIT"
 srcDir        = "tweetvibe_frontend"
-binDir        = "public/js"
+binDir        = "static/js"
 bin           = @["homepage"]
 backend       = "js"
 
