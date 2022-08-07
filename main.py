@@ -26,7 +26,7 @@ def server():
     async def home():
         
         context = {
-            "path" : "/public/",
+            "path" : "static/",
             "file" : "homepage",
             "description" : "Tweet vibe, what vibe does your tweet give off ?"
         }
