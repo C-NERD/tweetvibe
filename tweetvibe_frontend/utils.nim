@@ -1,9 +1,14 @@
 {.experimental : "codeReordering".}
 
-import karax / [karaxdsl, vdom, vstyles], dom, asyncjs
-#from json import parseJson, to, JsonNode
+import karax / [karax, karaxdsl, vdom, vstyles], dom, asyncjs
+from uri import Uri, parseUri, decodeQuery
+from json import `$`, parseJson, JsonNode
+from std / jsonutils import fromJson, toJson, Joptions
+from tables import Table, `[]=`
 from sugar import `=>`
 #from std / jsonutils import toJson
+
+export parseJson, fromJson, toJson, JsonNode, `$` ## export json for fetch templates
 
 type
 
@@ -13,32 +18,62 @@ type
         show : bool
         timer : TimeOut
 
-    ReqMethod {.pure.} = enum
+    Overlay = ref object of VComponent
+
+        children : seq[VNode]
+        show : bool
+
+    ReqMethod* {.pure.} = enum
 
         Get, Post, Put, Delete, Head, Patch
 
-    Response = object
+    Response* = object
 
-        ok : bool
-        status : cint
-        text : cstring
+        ok* : bool
+        status* : cint
+        text* : cstring
+
+    Tweet* = ref object of RootObj
+
+        author_id*, conversation_id*, created_at*, id*, in_reply_to_user_id*, text* : string
+
+    Vibe* {.pure.} = enum
+
+        Negative, Neutral, Positive
+
+    ReplyVibe* = object
+
+        analysis* : tuple[score : int, vibe : Vibe]
+        reply* : Tweet
+
+    VibeAnalysis* = ref object of Tweet
+
+        result* : seq[ReplyVibe]
+
+    ErrorData*[T] = object
+
+        status* : bool
+        msg* : string
+        data* : T
 
 ## Reactive variables
 var
+    url_query* : Table[string, string]
     generaltoast : Toast
+    generaloverlay : Overlay
 
 ## Vanila js procs
-proc fetchWithTimeOut(url, body, content_type : cstring, meth : ReqMethod, timeout : cint) : Response {.importc, async.}
+proc fetchWithTimeOut*(url, body, content_type, meth : cstring, timeout : cint) : Response {.importc, async.}
 
 ## Helper procs
-template fetchImpl*(url, body, content_type : cstring = "text/html", meth : ReqMethod, timeout : cint = 10000, code : untyped) {.dirty.} =
+template fetchImpl*(url, body, content_type : cstring = "text/html", meth : ReqMethod, timeout : cint = 10000, code : untyped) =
 
     proc action() {.async.} =
 
         let 
             resp = newPromise() do(resolve : proc(response : Response)):
                 resolve(fetchWithTimeOut(url, body, content_type, ($meth).cstring, timeout))
-            response = await resp
+            response {.inject.} = await resp
 
         if not response.ok:
 
@@ -51,18 +86,22 @@ template fetchImpl*(url, body, content_type : cstring = "text/html", meth : ReqM
 
     discard action()
 
-template fetchJsonImpl*[T](url, body : cstring, meth : ReqMethod, timeout : cint = 10000, code : untyped) {.dirty.} =
+template fetchJsonImpl*[T](url, body : cstring, meth : ReqMethod, timeout : cint = 10000, code : untyped) =
 
-    fetchImpl(url, body, "application/json" meth, timeout):
+    fetchImpl(url, body, "application/json", meth, timeout):
 
-        let 
-            json_resp : JsonNode = parseJson($response.text)
-            resp_obj : T = json_resp.to(T)
-
+        var resp_obj {.inject.} : T
+        resp_obj.fromJson(parseJson($response.text), Joptions(allowExtraKeys : true, allowMissingKeys: true))
+        
         code
 
 proc showToast*(msg : string, timems : int = 2000) =
     ## displays toast
+    
+    if generaltoast.isNil():
+        ## do noting if toast var is nil
+        
+        return
 
     if not generaltoast.timer.isNil():
         ## destroys previous toast
@@ -70,17 +109,47 @@ proc showToast*(msg : string, timems : int = 2000) =
         generaltoast.timer.clearTimeout()
         generaltoast.timer = nil
 
+    generaltoast.markDirty()
     generaltoast.show = true
     generaltoast.msg = msg
-    generaltoast.markDirty()
 
     generaltoast.timer = setTimeout(
         () => (
+            generaltoast.markDirty();
             generaltoast.show = false;
             generaltoast.msg = "";
-            generaltoast.markDirty();
+            redraw()
         ), timems
     )
+
+proc showOverlay*(children : seq[VNode]) = 
+
+    if generaloverlay.isNil():
+        ## do noting if overlay var is nil
+        
+        return
+    
+    generaloverlay.markDirty()
+    generaloverlay.show = true
+    generaloverlay.children = children 
+
+proc hideOverlay() = 
+
+    if generaloverlay.isNil():
+        ## do noting if overlay var is nil
+        
+        return
+    
+    generaloverlay.markDirty()
+    generaloverlay.show = false 
+    generaloverlay.children = @[]
+
+proc parseUrlQueries*() =
+
+    let query = parseUri($window.location.href).query
+    for key, value in decodeQuery(query):
+
+        url_query[key] = value
 
 ## VNode procs
 proc navbar*() : VNode =
@@ -139,3 +208,42 @@ proc toast*(toast : var Toast = generaltoast) : Toast =
         toast = newComponent(Toast, render)
 
     return toast
+
+proc overlay*(overlay : var Overlay = generaloverlay) : Overlay =
+
+    proc render(overlay : VComponent) : VNode =
+
+        let self = Overlay(overlay)
+        self.markDirty()
+
+        let overlay_style : Vstyle = block :
+
+            var overlay_style : Vstyle
+            if self.show:
+
+                overlay_style = style(display, "flex")
+
+            else:
+
+                overlay_style = style(display, "none")
+
+            overlay_style
+
+        result = buildHtml span(id = "overlaycontainer", style = overlay_style):
+
+            span(id = "overlay"):
+
+                tdiv(class = "cancelbox", onclick = hideOverlay):
+
+                    tdiv(class = "cancelline1")
+                    tdiv(class = "cancelline2")
+
+                for child in self.children:
+
+                    child
+
+    if overlay.isNil():
+
+        overlay = newComponent(Overlay, render)
+
+    return overlay
