@@ -1,9 +1,11 @@
 import pytwitter
 from tweetvibe.utils import datatypes
 from tweetvibe.utils.utils import isemptyorspace
+from logging import getLogger
 from re import match, split
 from os import environ
 
+logger = getLogger("twitter_api")
 def isvalid_tweet_url(url : str) -> bool :
     """
     Checks if url contains twitter.com and the string status
@@ -106,10 +108,13 @@ class Twitter:
             
             return datatypes.ErrorData(True, "", {
                 "tweet_id" : tweet_id, "author_id" : author_id, 
-                "conversation_id" : conversation_id, "created_at" : created_at
+                "conversation_id" : conversation_id, "created_at" : created_at,
+                "text" : tweet["data"]["text"]
                 })
-        except KeyError:
-            ## TODO : log out an error message
+        except KeyError as e:
+            
+            logger.error(f"failed to get tweet {tweet_id}")
+            logger.debug(e)
             return datatypes.ErrorData(False, "Could not get tweet's data", None)
 
     def get_replies(self, data : dict, limit : int = 100) -> datatypes.ErrorData :

@@ -1,9 +1,11 @@
 import requests
 from tweetvibe.utils import datatypes
 from enum import IntEnum, unique
+from logging import getLogger
 from os import environ
 from json import dumps
 
+logger = getLogger("detect_vibe")
 @unique
 class Vibe(IntEnum):
 
@@ -79,6 +81,7 @@ class SentimentAnalyser:
         resp = requests.post(url, data = dumps(payload), headers = headers)
         if resp.status_code != 200:
 
+            logger.error(f"request to google api failed with code {resp.status_code}")
             return datatypes.ErrorData(False, "Failed to get text sentiment", {})
 
         resp_body = resp.json()

@@ -8,7 +8,7 @@ from flask import Flask, request, make_response, render_template
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from multiprocessing import Process
-from os import cpu_count
+from logging import getLogger
 
 env_file = Path(__file__).parent / ".env"
 dotenv.load_dotenv(env_file)
@@ -36,7 +36,7 @@ def server():
     @limiter.limit("80/hour") ## limit api to 80 calls per hour
     async def tweetvibe():
         
-        LIMIT = 10 ## to minimize polling the google api count will determine the number of replies to be analysed
+        LIMIT = 15 ## to minimize polling the google api count will determine the number of replies to be analysed
         body = request.json
         tweet_url = body.get("tweet_url")
         tweet_id = twitter.getidfromurl(tweet_url)
@@ -107,15 +107,55 @@ def server():
     app.run("localhost", 5000, True)
 
 if __name__ == "__main__":
+    import argparse
+    from os import cpu_count
 
-    ## user all cpu cores
-    cpus = cpu_count()
-    if cpus == None:
+    def validate_threads(threads) -> int :
 
-        cpus = 1
+        if threads == None:
 
-    for _ in range(cpus):
+            return 1
 
-        process = Process(target = server)
-        process.start()
-        process.join()
+        threads = int(threads)
+        cpus = cpu_count()
+        if threads < 1:
+
+            return 1
+        
+        elif threads > cpus:
+
+            return cpus
+        
+        return threads
+
+    parser = argparse.ArgumentParser("tweet vibe", usage = "python main.py <options>", description = "Web server for Tweet-Vibe")
+    parser.add_argument("--cleardb", action = "store_true", help = "clear db cache")
+    parser.add_argument("--run", action = "store_true", help = "run server")
+    parser.add_argument("-t", "--threads", type = int, help = "number of processes to spawn (defaults to 1)")
+
+    args = None
+    logger = getLogger()
+    try:
+
+        args = parser.parse_args()
+
+    except Exception:
+
+        parser.print_help()
+        quit()
+    
+    if args.cleardb:
+        ## clear db cache
+
+        logger.info("clearing db cache...")
+        db = database.Database()
+        db.clear_cache(True)
+    
+    elif args.run:
+
+        threads = validate_threads(args.threads)
+        for _ in range(threads):
+
+            process = Process(target = server)
+            process.start()
+            process.join()
