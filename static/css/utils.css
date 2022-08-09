@@ -64,6 +64,87 @@ h2, p{
     color: var(--coloured-btn);
 }
 
+.Negative_color{
+    background-color: rgb(211, 24, 63);
+}
+
+.Neutral_color{
+    background-color: rgb(24, 63, 211);
+}
+
+.Positive_color{
+    background-color: rgb(63, 211, 24);
+}
+
+canvas{
+    width: 500px;
+    height: 250px;
+}
+
+#loadscreen{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #f0f0f08f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#load-spiner {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+#load-spiner div {
+    background: var(--coloured-btn);
+    position: absolute;
+    border: 4px solid #fff;
+    opacity: 1;
+    border-radius: 50%;
+    animation: load-spiner 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+#load-spiner div:nth-child(2) {
+    animation-delay: -0.5s;
+}
+
+@keyframes load-spiner {
+    0% {
+        top: 36px;
+        left: 36px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    4.9% {
+        top: 36px;
+        left: 36px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    5% {
+        top: 36px;
+        left: 36px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    100% {
+        top: 0px;
+        left: 0px;
+        width: 72px;
+        height: 72px;
+        opacity: 0;
+    }
+}
+  
 #toastcontainer{
     width: 100%;
     position: fixed;
@@ -121,12 +202,12 @@ h2, p{
 
 #mainbody{
     width: 100%;
-    height: 500px;
+    min-height: 500px;
 }
 
 #contentbody{
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -149,4 +230,191 @@ h2, p{
     border: 1px solid var(--secondary);
     border-radius: 6px;
     margin-right: 10px;
+}
+
+#overlaycontainer{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#overlay{
+    width: 380px;
+    min-height: 250px;
+    padding: 15px;
+    border-radius: 8px;
+    background: var(--primary);
+    box-shadow: 0px 0px 0px var(--primary), 2px 0px 8px var(--onsecondary);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#cancelcontainer{
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.cancelbox{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelbox:active{
+    border: 1px solid var(--coloured-text);
+    background: var(--onprimary);
+}
+
+.cancelbox div{
+    width: 3px;
+    height: inherit;
+    background: var(--secondary);
+    position: absolute;
+    border-radius: 6px;
+}
+
+.cancelline1{
+    transform: rotate(45deg);
+}
+
+.cancelline2{
+    transform: rotate(-45deg);
+}
+
+#vertical_center{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.social_media{
+	width: 40%;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.social_media p{
+	font-size: x-large;
+}
+
+#youtube, #twitter, #telegram{
+	width: 40px;
+	height: 40px;
+	border-radius: 6px;
+}
+
+#youtube{
+	background: url("../images/youtube.svg") no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+#twitter{
+	background: url("../images/twitter.svg") no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+#telegram{
+	background: url("../images/telegram.svg") no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+
+#tweet_analysis{
+    padding: 20px 2% 20px 2%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.root_tweet, #analysis-charts, #tweet_replies, #reply-controller{
+    padding: 20px 3% 20px 3%;
+}
+
+.root_tweet{
+    width: 64%;
+    border-radius: 6px;
+    background-color: var(--onprimary);
+}
+
+.vibe-color-code{
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    margin-right: 20px;
+}
+
+.vibe_status{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#analysis-charts{
+    width: 88%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#reply-controller{
+    margin-bottom: 20px;
+    width: 84%;
+    background: var(--onprimary);
+    border-radius: 6px;
+    font-size: x-large;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#drop-btn{
+    background: url("../images/dropdown.svg") no-repeat;
+    background-position: center;
+    background-size: contain;
+    padding: 10px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px var(--primary), 2px 0px 8px var(--onsecondary);
+}
+
+#drop-btn:active{
+    border: 1px solid var(--coloured-text);
+    box-shadow: inset 0px 0px 0px var(--primary), 
+    inset 2px 0px 8px var(--onsecondary);
+}
+
+#tweet_replies{
+    width: 84%;
+    display: contents;
+}
+
+#tweet_replies .root_tweet{
+    margin-bottom: 20px;
 }
