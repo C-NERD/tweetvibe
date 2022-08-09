@@ -2,9 +2,10 @@
 <html>
     <head>
         <link rel="manifest" href=" {{ context.path }}manifest.json" />
-        <link rel="icon" href="{{ context.path }}images/logo.ico">
+        <link rel="icon" href="{{ context.path }}images/tweetvibe.png">
         <link rel="stylesheet" type="text/css" href="{{ context.path }}css/utils.css">
         <link rel="stylesheet" type="text/css" href="{{ context.path }}css/{{ context.file }}.css">
+        <link rel="stylesheet" type="text/css" href="static/css/Chart.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="origin">
         <meta charset = "utf-8">
@@ -19,7 +20,50 @@
     <body>
         <main id="ROOT"></main>
     </body>
+    <script src="static/js/Chart.min.js"></script>
     <script>
+        function showBarChart(id, label, data, labels, bg, bc) {
+            const ctx = document.getElementById(id).getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: bg,
+                        borderColor: bc,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function showDoughnutChart(id, label, data, labels, bg, bc) {
+            const ctx = document.getElementById(id).getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: bg,
+                        borderColor: bc,
+                        borderWidth: 2
+                    }],
+                    hoverOffset: 4
+                }
+            });
+        }
+
         async function fetchWithTimeOut(url, body, content_type, meth, timeout) {
 
             var status;
@@ -35,6 +79,7 @@
             const controller = new AbortController();
             const id = setTimeout(() => {
                 controller.abort();
+                showToast("Request Timed out", 2000);
             }, timeout);
 
             if (meth === "Get" | meth === "Head"){
