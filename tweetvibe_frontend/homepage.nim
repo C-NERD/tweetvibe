@@ -57,20 +57,14 @@ proc tweet(tweet : Tweet, vibe : Vibe, main_tweet : bool = false) : VNode =
 
     result = buildHtml span(class = "root_tweet"):
 
-        tdiv(class = "vibe_status"):
+        if not main_tweet:
 
-            tdiv(class = "vibe-color-code", style = vibe_color)
-            if not main_tweet:
+            tdiv(class = "vibe_status"):
 
+                tdiv(class = "vibe-color-code", style = vibe_color)
                 h3:
 
                     text fmt"Tweet gives {vibe} vibes"
-                
-            else:
-
-                h3:
-
-                    text fmt"Tweet replies are mostly {vibe}"
 
         span(class = "tweet-meta"):
 

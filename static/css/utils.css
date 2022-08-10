@@ -30,7 +30,7 @@ html, body, #ROOT{
 html, body{
     height: 100%;
     margin: 0;
-    display: inline-block;
+    /*display: inline-block;*/
 }
 
 h2, p{
