@@ -92,8 +92,8 @@ if __name__ == "__main__":
         
         else:
 
-            nim_ver = search(r"[0-9].[0-9].[0-9]", nim_ver_info)
-            nim_ver_splited = nim_ver.split(".")
+            nim_ver = search(r"[0-9].[0-9].[0-9]", nim_ver_info.stdout)
+            nim_ver_splited = nim_ver[0].split(".")
 
             if int(nim_ver_splited[0]) < 1:
 
@@ -111,6 +111,8 @@ if __name__ == "__main__":
 
         logging.info("updating to new version of nim...")
         run(["sudo", pkg_manager, install_cmd, "nim"])
+        run(["nimble", "install", "choosenim"])
+        run(["choosenim", "update", "1.6.6"])
 
     logging.info("installing package dependencies...")
     ## install package dependencies
