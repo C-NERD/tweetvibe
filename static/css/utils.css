@@ -16,6 +16,7 @@ html, body, #ROOT{
     width: 100%;
     font-size: large;
     color: var(--text);
+    overflow-x: hidden;
 
     /*Prevent text selection*/
     -webkit-touch-callout: none;
@@ -260,7 +261,7 @@ canvas{
 #cancelcontainer{
     padding: 10px;
     width: 100%;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .cancelbox{
@@ -417,4 +418,160 @@ canvas{
 
 #tweet_replies .root_tweet{
     margin-bottom: 20px;
+}
+
+@media only screen and (max-width : 768px){
+
+    html, body, #ROOT{
+        font-size: x-large;
+    }
+
+    canvas{
+        width: 600px;
+        height: 300px;
+    }
+    
+    #navbar{
+        width: 97%;
+        padding: calc(1.5%);
+        box-shadow: 0px 0px 0px var(--primary), 
+        2px 0px 8px var(--onsecondary);
+    }
+    
+    #navwidgets{
+        width: 25%;
+    }
+    
+    #footbar{
+        height: 25px;
+    }
+
+    #mainbody{
+        min-height: 800px;
+    }
+
+    #overlay{
+        width: 70%;
+        padding: 30px;
+    }
+    
+    #cancelcontainer{
+        padding: 20px;
+    }
+    
+    .cancelbox{
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+    }
+    
+    .cancelbox div{
+        width: 3px;
+    }
+
+    .coloured-btn{
+        font-size: x-large;
+    }
+
+    .social_media p{
+        font-size: xx-large;
+    }
+
+    #youtube, #twitter, #telegram{
+        width: 60px;
+        height: 60px;
+    }
+
+    #searchbar{
+        width: 80%;
+    }
+
+    #searchbar input[type="text"]{
+        font-size: x-large;
+        width: 90%;
+    }
+
+    #reply-controller{
+        font-size: xx-large;
+    }
+
+    #analysis-charts{
+        flex-direction: column;
+        height: 850px;
+    }
+}
+
+@media only screen and (max-width : 400px){
+
+    canvas{
+        width: 360px;
+        height: 130px;
+    }
+
+    .root_tweet {
+        width: 90%;
+    }
+
+    .social_media{
+        width: 80%;
+    }
+
+    #reply-controller {
+        width: 92%;
+    }
+    
+    #navbar{
+        height: 70px;
+    }
+
+    #navbar h2{
+        font-size: larger;
+    }
+    
+    #navwidgets{
+        width: 45%;
+        height: 100%;
+    }
+    
+    #footbar{
+        height: 60px;
+        width: 96%;
+        padding: 10px 2% 10px 2%;
+        display: flex;
+        align-items: center;
+    }
+
+    #mainbody{
+        min-height: 800px;
+    }
+
+    #overlay{
+        width: 80%;
+        padding: 30px;
+    }
+
+    #searchbar{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        height: 150px;
+        align-items: flex-start;
+        justify-content: space-around;
+    }
+
+    #searchbar input[type="text"]{
+        font-size: x-large;
+        width: 96%;
+        padding: 10px 2% 10px 2%;
+        height: 40px;
+    }
+
+    #reply-controller{
+        font-size: xx-large;
+    }
+
+    #analysis-charts{
+        flex-direction: column;
+        height: 600px;
+    }
 }
