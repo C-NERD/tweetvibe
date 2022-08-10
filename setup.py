@@ -3,7 +3,7 @@
 ## make sure to run with root permission
 
 from subprocess import run
-from os import geteuid
+from os import geteuid, putenv
 import logging
 
 logging.basicConfig(level = logging.NOTSET, format = "%(levelname)s :: %(asctime)s -> %(message)s", force = True)
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     logging.info("updating to new version of nim...")
     run(["sudo", pkg_manager, install_cmd, "nim"])
     run(["nimble", "install", "choosenim"])
-    run(["choosenim", "update", "1.6.6"])
+    run(["~/.nimble/bin/choosenim", "update", "1.6.6"])
 
     logging.info("installing package dependencies...")
     ## install package dependencies
