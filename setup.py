@@ -76,6 +76,9 @@ if __name__ == "__main__":
 
         logging.info("updating to new version of python...")
         run(["sudo", pkg_manager, install_cmd, "python3"])
+    
+    logging.info("installing pip...")
+    run(["sudo", pkg_manager, install_cmd, "pip"])
 
     logging.info("checking nim version...")
     ## check if nim version is less than 1.4.0 if so update nim
@@ -83,16 +86,22 @@ if __name__ == "__main__":
     try:
 
         nim_ver_info = run(["nim", "-v"], text = True, capture_output = True)
-        nim_ver = search(r"[0-9].[0-9].[0-9]", nim_ver_info)
-        nim_ver_splited = nim_ver.split(".")
-
-        if int(nim_ver_splited[0]) < 1:
+        if nim_ver_info == None:
 
             update_nim = True
         
-        elif int(nim_ver_splited[1]) < 4:
+        else:
 
-            update_nim = True
+            nim_ver = search(r"[0-9].[0-9].[0-9]", nim_ver_info)
+            nim_ver_splited = nim_ver.split(".")
+
+            if int(nim_ver_splited[0]) < 1:
+
+                update_nim = True
+        
+            elif int(nim_ver_splited[1]) < 4:
+
+                update_nim = True
 
     except FileNotFoundError:
 
