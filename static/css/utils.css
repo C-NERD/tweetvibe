@@ -503,6 +503,10 @@ canvas{
 
 @media only screen and (max-width : 400px){
 
+    html, body, #ROOT{
+        font-size: large;
+    }
+
     canvas{
         width: 360px;
         height: 130px;
@@ -525,7 +529,7 @@ canvas{
     }
 
     #navbar h2{
-        font-size: larger;
+        font-size: x-large;
     }
     
     #navwidgets{
@@ -539,6 +543,7 @@ canvas{
         padding: 10px 2% 10px 2%;
         display: flex;
         align-items: center;
+        justify-content: center;
     }
 
     #mainbody{
@@ -546,7 +551,7 @@ canvas{
     }
 
     #overlay{
-        width: 80%;
+        width: 78%;
         padding: 30px;
     }
 

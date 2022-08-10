@@ -9,9 +9,25 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from multiprocessing import Process
 from logging import getLogger
+from os import environ
 
 env_file = Path(__file__).parent / ".env"
 dotenv.load_dotenv(env_file)
+
+HOST = environ.get("SERVER_HOST")
+PORT = environ.get("SERVER_PORT")
+
+if utils.isemptyorspace(HOST):
+
+    HOST = "localhost" # default host
+
+if utils.isemptyorspace(PORT):
+
+    PORT = 5000 # default port
+
+else:
+
+    PORT = int(PORT)
 
 def server():
 
@@ -104,7 +120,7 @@ def server():
         response = make_response(dict(datatypes.ErrorData(True, "", tweet.data)))
         return response
 
-    app.run("localhost", 5000, True)
+    app.run(HOST, PORT, True)
 
 if __name__ == "__main__":
     import argparse
