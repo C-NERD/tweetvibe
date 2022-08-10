@@ -1,6 +1,7 @@
 ## python script to setup project's dependencies
 ## for debian and arch linux only
 ## make sure to run with root permission
+## has errors for now
 
 from subprocess import run
 from os import geteuid, putenv
