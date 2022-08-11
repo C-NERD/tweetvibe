@@ -1,4 +1,4 @@
-dotenv
+python-dotenv
 flask
 python-twitter-v2
 pymongo

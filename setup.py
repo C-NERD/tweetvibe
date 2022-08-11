@@ -4,7 +4,7 @@
 ## has errors for now
 
 from subprocess import run
-from os import geteuid, putenv
+from os import geteuid, putenv, environ
 from pathlib import Path
 import logging
 
@@ -69,14 +69,25 @@ if __name__ == "__main__":
     logging.info("installing pip...")
     run(["sudo", pkg_manager, install_cmd, "pip"])
 
-    logging.info("updating to new version of nim...")
+    logging.info("setting up nim...")
     run(["sudo", pkg_manager, install_cmd, "nim"])
     run(["nimble", "install", "choosenim"])
-    run([f"{HOME_DIR / '.nimble/bin/choosenim'}", "update", "1.6.6"])
+    
+    logging.info("adding nimble bin dir to path")
+    path = environ.get('PATH')
+    environ["PATH"] = path + f":{HOME_DIR / '.nimble/bin'}"
+
+    logging.info("install nim version 1.6.6")
+    run(["choosenim", "update", "1.6.6"])
+
+    logging.info("adding nim 1.6.6 to path")
+    path = environ.get('PATH')
+    environ["PATH"] = path + f":{HOME_DIR / '.choosenim/toolchains/nim-1.6.6/bin'}"
 
     logging.info("installing package dependencies...")
     ## install package dependencies
-    run(["pip", "install", f"-r {SCRIPT_DIR / 'requirements.txt'}"])
+    run(["ls", "-a"])
+    run(["pip", "install", "-r", "requirements.txt"])
     run(["nimble", "build"]) ## install dependencies and build frontend
 
     logging.info("creating .env file...")
