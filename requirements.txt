@@ -1,4 +1,6 @@
 python-dotenv
+asgiref
+aioflask
 flask
 python-twitter-v2
 pymongo
