@@ -5,7 +5,11 @@
 
 from subprocess import run
 from os import geteuid, putenv
+from pathlib import Path
 import logging
+
+SCRIPT_DIR = Path(__file__).parent
+HOME_DIR = Path().home()
 
 logging.basicConfig(level = logging.NOTSET, format = "%(levelname)s :: %(asctime)s -> %(message)s", force = True)
 def check_if_root() -> bool :
@@ -68,11 +72,11 @@ if __name__ == "__main__":
     logging.info("updating to new version of nim...")
     run(["sudo", pkg_manager, install_cmd, "nim"])
     run(["nimble", "install", "choosenim"])
-    run(["~/.nimble/bin/choosenim", "update", "1.6.6"])
+    run([f"{HOME_DIR / '.nimble/bin/choosenim'}", "update", "1.6.6"])
 
     logging.info("installing package dependencies...")
     ## install package dependencies
-    run(["pip", "install", "-r requirements.txt"])
+    run(["pip", "install", f"-r {SCRIPT_DIR / 'requirements.txt'}"])
     run(["nimble", "build"]) ## install dependencies and build frontend
 
     logging.info("creating .env file...")
