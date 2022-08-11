@@ -36,7 +36,7 @@ You need python >= 3.7 and nim >= 1.4.0 to setup and run this project, so instal
    DATABASE_URI=mongodb://localhost:27017/
    ```
 
-or you could just run the setup.py script if you are on debian of arch.
+or you could just run the setup.py script if you are on debian of arch. Also make sure to install and setup mongodb before running the code
 
 ## Run
 
