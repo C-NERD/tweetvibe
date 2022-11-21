@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.2.0"
 author        = "C-NERD"
 description   = "Web frontend for tweetvibe app"
 license       = "MIT"
@@ -11,4 +11,4 @@ backend       = "js"
 
 # Dependencies
 
-requires "nim == 1.6.6", "karax#Head"
+requires "nim == 1.6.6", "karax#head"

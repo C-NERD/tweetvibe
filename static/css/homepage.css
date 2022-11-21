@@ -1,0 +1,105 @@
+#tweet_analysis{
+    padding: 20px 2% 20px 2%;
+    min-height: 400px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#parent_tweet, #tweet_replies, #analysis_charts{
+    margin: 20px 0;
+}
+
+#parent_tweet, #tweet_replies, #analysis_charts, #tweet_replies_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.root_tweet, #charts_container{
+    margin-bottom: 20px;
+    width: 94%;
+    padding: 20px 3% 20px 3%;
+    border-radius: 6px;
+    background-color: var(--onprimary);
+}
+
+#charts_container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#replies-scores-container, #vibe-ratings-container{
+    width: 45%;
+    height: 400px;
+}
+
+.vibe-color-code{
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    margin-right: 20px;
+}
+
+.vibe_status{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.dropdown_container{
+    margin-bottom: 20px;
+    width: 94%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 3% 10px 3%;
+    border-radius: 6px;
+    background: var(--onprimary);
+}
+
+.dropdown_container h3{
+    margin: 0;
+}
+
+.dropdown_container .dropdown{
+    width: 35px;
+    height: 35px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px var(--primary), 
+    2px 4px 8px var(--onsecondary);
+}
+
+.dropdown_container .dropdown:active{
+    box-shadow: inset 0px 0px 0px var(--primary), 
+    inset 2px 4px 8px var(--onsecondary);
+}
+
+@media only screen and (max-width : 768px) {
+
+    #charts_container {
+        flex-direction: column;
+    }
+
+    #replies-scores-container, #vibe-ratings-container {
+        width: 100%;
+        height: 450px;
+    }
+}
+
+@media only screen and (max-width : 400px) {
+
+    #replies-scores-container, #vibe-ratings-container {
+        height: 250px;
+    }
+}

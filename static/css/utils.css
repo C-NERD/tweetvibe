@@ -77,6 +77,11 @@ h2, p{
     background-color: rgb(63, 211, 24);
 }
 
+.icon{
+    width: 25px;
+    height: 25px;
+}
+
 canvas{
     width: 500px;
     height: 250px;
@@ -170,13 +175,18 @@ canvas{
     justify-content: space-between;
 }
 
-#navbar, #navwidgets{
+#nav_container{
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    flex-direction: column;
 }
 
 #navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 97%;
     padding: calc(1.5%);
     box-shadow: 0px 0px 0px var(--primary), 2px 0px 8px var(--onsecondary);
@@ -186,19 +196,47 @@ canvas{
     color: var(--coloured-text);
 }
 
-#navwidgets{
-    width: 15%;
-    padding: 0 20px 0 20px;
+#footbar{
+    width: 100%;
+    justify-content: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-#footbar{
+#footbar1, #footbar2{
     width: 98%;
+    display: flex;
+    align-items: center;
+    /*justify-content: center;*/
+    border-top: 1px solid var(--secondary);
+}
+
+#footbar1{
+    padding: 2%;
+    justify-content: flex-end;
+}
+
+#footbar2{
     padding: 1%;
+    justify-content: center;
+}
+
+#footwidgets{
+    width: 25%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#footwidgets a{
+    text-decoration: none;
+    color: var(--secondary);
     display: flex;
     align-items: center;
     justify-content: center;
-
-    border-top: 1px solid var(--secondary);
 }
 
 #mainbody{
@@ -233,191 +271,13 @@ canvas{
     margin-right: 10px;
 }
 
-#overlaycontainer{
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#overlay{
-    width: 380px;
-    min-height: 250px;
-    padding: 15px;
-    border-radius: 8px;
-    background: var(--primary);
-    box-shadow: 0px 0px 0px var(--primary), 2px 0px 8px var(--onsecondary);
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-#cancelcontainer{
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 30px;
-}
-
-.cancelbox{
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cancelbox:active{
-    border: 1px solid var(--coloured-text);
-    background: var(--onprimary);
-}
-
-.cancelbox div{
-    width: 3px;
-    height: inherit;
-    background: var(--secondary);
-    position: absolute;
-    border-radius: 6px;
-}
-
-.cancelline1{
-    transform: rotate(45deg);
-}
-
-.cancelline2{
-    transform: rotate(-45deg);
-}
-
-#vertical_center{
-	width: 100%;
+.social_media{
+    margin-bottom: 5px;
+	padding: 2px;
+    width: 40%;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 20px;
-}
-
-.social_media{
-	width: 40%;
-	padding: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-}
-
-.social_media p{
-	font-size: x-large;
-}
-
-#youtube, #twitter, #telegram{
-	width: 40px;
-	height: 40px;
-	border-radius: 6px;
-}
-
-#youtube{
-	background: url("../images/youtube.svg") no-repeat;
-	background-size: contain;
-	background-position: center;
-}
-
-#twitter{
-	background: url("../images/twitter.svg") no-repeat;
-	background-size: contain;
-	background-position: center;
-}
-
-#telegram{
-	background: url("../images/telegram.svg") no-repeat;
-	background-size: contain;
-	background-position: center;
-}
-
-#tweet_analysis{
-    padding: 20px 2% 20px 2%;
-    min-height: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.root_tweet, #analysis-charts, #tweet_replies, #reply-controller{
-    padding: 20px 3% 20px 3%;
-}
-
-.root_tweet{
-    width: 64%;
-    border-radius: 6px;
-    background-color: var(--onprimary);
-}
-
-.vibe-color-code{
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
-    margin-right: 20px;
-}
-
-.vibe_status{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-#analysis-charts{
-    width: 88%;
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#reply-controller{
-    margin-bottom: 20px;
-    width: 84%;
-    background: var(--onprimary);
-    border-radius: 6px;
-    font-size: x-large;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#drop-btn{
-    background: url("../images/dropdown.svg") no-repeat;
-    background-position: center;
-    background-size: contain;
-    padding: 10px;
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--secondary);
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 0px 0px 0px var(--primary), 2px 0px 8px var(--onsecondary);
-}
-
-#drop-btn:active{
-    border: 1px solid var(--coloured-text);
-    box-shadow: inset 0px 0px 0px var(--primary), 
-    inset 2px 0px 8px var(--onsecondary);
-}
-
-#tweet_replies{
-    width: 84%;
-    display: contents;
-}
-
-#tweet_replies .root_tweet{
-    margin-bottom: 20px;
 }
 
 @media only screen and (max-width : 768px){
@@ -437,12 +297,8 @@ canvas{
         box-shadow: 0px 0px 0px var(--primary), 
         2px 0px 8px var(--onsecondary);
     }
-    
-    #navwidgets{
-        width: 25%;
-    }
-    
-    #footbar{
+        
+    #footbar2{
         height: 25px;
     }
 
@@ -450,36 +306,8 @@ canvas{
         min-height: 800px;
     }
 
-    #overlay{
-        width: 70%;
-        padding: 30px;
-    }
-    
-    #cancelcontainer{
-        padding: 20px;
-    }
-    
-    .cancelbox{
-        width: 30px;
-        height: 30px;
-        border-radius: 6px;
-    }
-    
-    .cancelbox div{
-        width: 3px;
-    }
-
-    .coloured-btn{
-        font-size: x-large;
-    }
-
     .social_media p{
         font-size: xx-large;
-    }
-
-    #youtube, #twitter, #telegram{
-        width: 60px;
-        height: 60px;
     }
 
     #searchbar{
@@ -489,15 +317,6 @@ canvas{
     #searchbar input[type="text"]{
         font-size: x-large;
         width: 90%;
-    }
-
-    #reply-controller{
-        font-size: xx-large;
-    }
-
-    #analysis-charts{
-        flex-direction: column;
-        height: 850px;
     }
 }
 
@@ -512,18 +331,10 @@ canvas{
         height: 130px;
     }
 
-    .root_tweet {
-        width: 90%;
-    }
-
     .social_media{
         width: 80%;
     }
 
-    #reply-controller {
-        width: 92%;
-    }
-    
     #navbar{
         height: 70px;
     }
@@ -532,12 +343,7 @@ canvas{
         font-size: x-large;
     }
     
-    #navwidgets{
-        width: 45%;
-        height: 100%;
-    }
-    
-    #footbar{
+    #footbar1{
         height: 60px;
         width: 96%;
         padding: 10px 2% 10px 2%;
@@ -548,11 +354,6 @@ canvas{
 
     #mainbody{
         min-height: 800px;
-    }
-
-    #overlay{
-        width: 78%;
-        padding: 30px;
     }
 
     #searchbar{
@@ -571,12 +372,13 @@ canvas{
         height: 40px;
     }
 
-    #reply-controller{
-        font-size: xx-large;
+    #footwidgets{
+        width: 96%;
+        padding: 2%;
+        flex-direction: row;
     }
-
-    #analysis-charts{
-        flex-direction: column;
-        height: 600px;
+    
+    #footwidgets a p{
+        display: none;
     }
 }

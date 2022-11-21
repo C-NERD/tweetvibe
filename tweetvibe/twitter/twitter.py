@@ -1,11 +1,9 @@
-import pytwitter
+import pytwitter, logging
 from tweetvibe.utils import datatypes
 from tweetvibe.utils.utils import isemptyorspace
-from logging import getLogger
 from re import match, split
 from os import environ
 
-logger = getLogger("twitter_api")
 def isvalid_tweet_url(url : str) -> bool :
     """
     Checks if url contains twitter.com and the string status
@@ -48,6 +46,12 @@ def getidfromurl(url : str) -> str :
 class Twitter:
 
     def __init__(self):
+
+        handler = logging.FileHandler(environ.get("TWITTER_LOG"))
+        handler.formatter = logging.Formatter("%(levelname)s :: %(asctime)s -> %(message)s")
+        
+        self.logger = logging.Logger("sentiment_logger")
+        self.logger.addHandler(handler)
         
         self.api = pytwitter.Api(
             bearer_token = environ.get("TWITTER_BEARER_TOKEN"),
@@ -113,8 +117,8 @@ class Twitter:
                 })
         except KeyError as e:
             
-            logger.error(f"failed to get tweet {tweet_id}")
-            logger.debug(e)
+            self.logger.error(f"failed to get tweet {tweet_id}")
+            self.logger.debug(e)
             return datatypes.ErrorData(False, "Could not get tweet's data", None)
 
     def get_replies(self, data : dict, limit : int = 100) -> datatypes.ErrorData :

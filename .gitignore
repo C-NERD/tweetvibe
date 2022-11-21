@@ -6,3 +6,9 @@ __pycache__
 
 ## generated js files
 homepage.js
+
+## database file
+/*.db
+
+## log files
+logs/*

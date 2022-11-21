@@ -1,17 +1,8 @@
-import requests
+import requests, logging
 from tweetvibe.utils import datatypes
 from enum import IntEnum, unique
-from logging import getLogger
 from os import environ
 from json import dumps
-
-logger = getLogger("detect_vibe")
-@unique
-class Vibe(IntEnum):
-
-    Negative = 1
-    Neutral = 2
-    Positive = 3
 
 class SentimentAnalyser:
     """
@@ -19,6 +10,12 @@ class SentimentAnalyser:
     """
 
     def __init__(self):
+
+        handler = logging.FileHandler(environ.get("SENTIMENT_LOG"))
+        handler.formatter = logging.Formatter("%(levelname)s :: %(asctime)s -> %(message)s")
+        
+        self.logger = logging.Logger("sentiment_logger")
+        self.logger.addHandler(handler)
 
         self.ROOT_URL = "https://language.googleapis.com"
         self.KEY = environ.get("GOOGLE_API_KEY")
@@ -38,23 +35,23 @@ class SentimentAnalyser:
 
         return score
 
-    def score_to_vibe(self, score : float) -> Vibe :
+    def score_to_vibe(self, score : float) -> datatypes.Vibe :
 
         if score in range(0, 3):
 
-            return Vibe.Negative
+            return datatypes.Vibe.Negative
 
         elif score in range(3, 7):
 
-            return Vibe.Neutral
+            return datatypes.Vibe.Neutral
 
         elif score in range(7, 10):
 
-            return Vibe.Positive
+            return datatypes.Vibe.Positive
 
         else:
 
-            return Vibe.Negative
+            return datatypes.Vibe.Negative
 
     def get_text_vibe(self, text : str) -> datatypes.ErrorData :
         """
@@ -81,7 +78,7 @@ class SentimentAnalyser:
         resp = requests.post(url, data = dumps(payload), headers = headers)
         if resp.status_code != 200:
 
-            logger.error(f"request to google api failed with code {resp.status_code}")
+            self.logger.error(f"request to google api failed with code {resp.status_code}")
             return datatypes.ErrorData(False, "Failed to get text sentiment", {})
 
         resp_body = resp.json()

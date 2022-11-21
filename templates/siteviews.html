@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="{{ context.path }}css/utils.css">
         <link rel="stylesheet" type="text/css" href="{{ context.path }}css/{{ context.file }}.css">
         <link rel="stylesheet" type="text/css" href="static/css/Chart.min.css">
+        <link rel="stylesheet" type="text/css" href="static/css/all.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="origin">
         <meta charset = "utf-8">
@@ -79,7 +80,7 @@
             const controller = new AbortController();
             const id = setTimeout(() => {
                 controller.abort();
-                showToast("Request Timed out", 2000);
+                setToast("Request Timed out", 2000);
             }, timeout);
 
             if (meth === "Get" | meth === "Head"){
